@@ -1,4 +1,4 @@
-function [base_params, beta, Y_b]= base_parameters(DH,q,qdot,qddot)
+function [base_params, Y_b, inv_map]= base_parameters(DH,q,qdot,qddot)
     %% initializing all inertial parameters
     numjoints = size(DH,1)-1;
     syms m [1 numjoints] real
@@ -31,7 +31,7 @@ function [base_params, beta, Y_b]= base_parameters(DH,q,qdot,qddot)
     %%
     [Q, R, P] = qr(Y_iden);
     b = rank(Y_iden);
-    % p = size(R,2);
+    z
     P_p = P(:,1:b);
     P_d = P(:,b+1:end);
     R_p = R(1:b,1:b);
@@ -45,10 +45,7 @@ function [base_params, beta, Y_b]= base_parameters(DH,q,qdot,qddot)
      
     % Y_b = Y_iden*pinv(beta);
     Y_b = Y_iden*P_p;
-    % phi_s = pinv(beta)*base_params;
 
-    % inv_map = P*[ones(b), -K_factor;
-    %             zeros(p-b,b), ones(p-b)];
-    % phi_d = P_d'*phi;
-    % stand_params = inv_map*[base_params;phi_d];
+    inv_map = P*[ones(b), -K_factor;
+                zeros(b+1:end,b), ones(b+1:end)];
 end
